@@ -1,0 +1,29 @@
+.categories-container{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.single-post{
+    margin-top: 1rem;
+    margin-bottom: 4rem;
+    box-shadow: 3px 3px 8px grey;
+    padding: 1rem;
+}
+
+.post-footer{
+    display: flex;
+    font-size: 0.9rem;
+}
+.post-title{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.post-footer p:first-of-type{
+    margin-right: 2rem;
+}
+
+.post-tags{
+    display: flex;
+}
