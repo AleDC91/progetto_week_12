@@ -1,0 +1,18 @@
+.loading-navbar{
+    height: 50px;
+    background-color: grey;
+    animation: loadingNavbarAnimation 1.5s linear infinite ;
+}
+
+@keyframes loadingNavbarAnimation {
+    0%{
+        background-color: rgb(91, 91, 91);
+    }
+    50%{
+        background-color: rgb(205, 205, 205);
+    }
+    100%{
+        background-color: grey;
+    }
+
+}

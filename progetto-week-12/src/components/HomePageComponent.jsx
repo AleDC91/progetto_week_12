@@ -4,12 +4,15 @@ import axios from "axios";
 import SinglePostComponent from "./SinglePostComponent";
 import SearchPostsComponent from "./SearchPostsComponent";
 export default function HomePageComponent() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState(null);
   const [query, setQuery] = useState("");
 
   useEffect(() => {
     getAllPosts();
+
   }, []);
+
+
 
   const getAllPosts = () => {
     axios(baseURL + "posts").then((res) => {
@@ -21,7 +24,7 @@ export default function HomePageComponent() {
   return (
     <div className="container">
       <SearchPostsComponent setQuery={setQuery} />
-      {posts.length > 0 &&
+      {posts &&
         posts
           .filter(
             (post) =>

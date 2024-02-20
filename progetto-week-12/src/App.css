@@ -1,0 +1,5 @@
+body{
+    background: linear-gradient(rgb(222, 200, 200), rgb(128, 128, 130));
+    height: 100vh;
+    background-attachment: fixed;
+}
