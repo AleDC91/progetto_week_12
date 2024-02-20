@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import LoadingNavbar from "./LoadingNavbar";
 import { useSelector } from "react-redux";
 
-export default function NavbarComponent({handleLogout}) {
+export default function NavbarComponent({ handleLogout }) {
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [authors, setAuthors] = useState([]);
@@ -18,7 +18,7 @@ export default function NavbarComponent({handleLogout}) {
 
   useEffect(() => {
     loadNavbarData();
-   console.log(username)
+    console.log(username);
   }, [username]);
 
   const loadNavbarData = async () => {
@@ -55,8 +55,9 @@ export default function NavbarComponent({handleLogout}) {
         <Navbar expand="lg" className="bg-body-tertiary" data-bs-theme="dark">
           <Container>
             <Link to="/" className="navbar-brand">
-              {Object.keys(siteSettings).length > 0 ? 
-              siteSettings.title : "Site Title"}
+              {Object.keys(siteSettings).length > 0
+                ? siteSettings.title
+                : "Site Title"}
             </Link>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -64,7 +65,6 @@ export default function NavbarComponent({handleLogout}) {
                 <Link to="/" className="nav-link">
                   Home
                 </Link>
-                
 
                 {authors.length > 0 && (
                   <NavDropdown title="Authors" id="basic-nav-dropdown">
@@ -106,21 +106,27 @@ export default function NavbarComponent({handleLogout}) {
                     ))}
                   </NavDropdown>
                 )}
-                {username && <Nav.Link >
-                {`Hi ${username}`}
-                  </Nav.Link>}
-                  {
-                  logged &&
-                  <Button 
-                  className="ms-md-5"
-                  variant="light"
-                  onClick={handleLogout}
-                  >Logout</Button>
-                }
+
+                {username && (
+                  <Nav.Link className="ms-5">{`Hi ${username}`}</Nav.Link>
+                )}
+
+                {logged && (
+                  <Link to="/newPost" className="nav-link text-white fs-bold ms-3">
+                    NEW POST
+                  </Link>
+                )}
+                {logged && (
+                  <Button
+                    className="ms-md-5"
+                    variant="light"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </Button>
+                )}
               </Nav>
-              
             </Navbar.Collapse>
-       
           </Container>
         </Navbar>
       )}
