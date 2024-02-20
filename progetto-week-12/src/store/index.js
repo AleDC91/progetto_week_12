@@ -5,16 +5,18 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import { thunk } from "redux-thunk";
 import storage from "redux-persist/lib/storage";
 import userReducer from "../reducers/userReducer";
+import siteSettingsReducer from "../reducers/siteSettingsReducer";
 
 
 const initialState = {
   
   user: {},
-  
+  siteSettings: {}
 };
 
 const bigReducer = combineReducers({
   user: userReducer,
+  siteSettings: siteSettingsReducer
 });
 
 const persistentConfig = {

@@ -8,16 +8,25 @@ import AuthorPage from "./pages/AuthorPage";
 import CategoryPage from "./pages/CategoryPage";
 import TagPage from "./pages/TagPage";
 import LoginPage from "./pages/LoginPage";
-
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserLogged, setUserToken } from "./actions/userActions";
+import {
+  setUserEmail,
+  setUserLogged,
+  setUserToken,
+  setUserUsername,
+} from "./actions/userActions";
+import { setSiteSettings } from "./actions/siteSettingsActions";
+import axios from "axios";
+import { baseURL } from "./config";
+import NewPostPage from "./pages/NewPostPage";
 
 function App() {
   const dispatch = useDispatch();
 
   const token = useSelector((state) => state.user.token);
   const logged = useSelector((state) => state.user.logged);
+  const siteSettings = useSelector((state) => state.siteSettings);
 
   useEffect(() => {
     if (token) {
@@ -29,22 +38,41 @@ function App() {
   const handleLogin = (token) => {
     dispatch(setUserToken(token));
     dispatch(setUserLogged(true));
+    getSiteSettings(token);
+    console.log(siteSettings);
   };
 
   const handleLogout = () => {
     dispatch(setUserToken(""));
     dispatch(setUserLogged(false));
+    dispatch(setUserUsername(""));
 
+  };
+
+  const getSiteSettings = (token) => {
+    axios
+      .get(baseURL + "settings", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => dispatch(setSiteSettings(res.data)));
   };
 
   return (
     <div className="App">
       <BrowserRouter>
-        <NavbarComponent loggedIn={logged} onLogout={handleLogout} />
+        <NavbarComponent handleLogout={handleLogout} />
         <Routes>
           <Route
             path="/login"
-            element={<LoginPage handleLogin={handleLogin} />}
+            element={
+              !logged ? (
+                <LoginPage handleLogin={handleLogin} />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
           <Route
             path="/"
@@ -65,6 +93,10 @@ function App() {
           <Route
             path="/tag/:tagId"
             element={logged ? <TagPage /> : <Navigate to="/login" />}
+          />
+           <Route
+            path="/newPost"
+            element={logged ? <NewPostPage /> : <Navigate to="/login" />}
           />
         </Routes>
       </BrowserRouter>

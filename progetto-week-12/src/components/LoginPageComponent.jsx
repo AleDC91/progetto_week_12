@@ -4,24 +4,23 @@ import { Button, Form } from "react-bootstrap";
 import { baseURL } from "../config";
 import ErrorComponent from "./ErrorComponent";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserUsername } from "../actions/userActions";
 
-
-export default function LoginPageComponent({handleLogin}) {
+export default function LoginPageComponent({ handleLogin }) {
   const [userData, setUserData] = useState({
     username: "",
     password: "",
   });
-
-
-const navigate = useNavigate();
+  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState("");
-
-
 
   const handleSubmit = (e) => {
     setErrorMsg("");
     e.preventDefault();
-    getToken();
+    getToken(userData);
   };
 
   const handleChange = (e) => {
@@ -29,12 +28,13 @@ const navigate = useNavigate();
     console.log(userData);
   };
 
-  const getToken = () => {
+  const getToken = (userData) => {
     axios
       .post("http://localhost/wp-json/jwt-auth/v1/token", userData)
       .then((res) => {
         const token = res.data.token;
         handleLogin(token);
+        dispatch(setUserUsername(userData.username));
         navigate("/");
       })
       .catch((error) => {

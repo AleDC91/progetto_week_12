@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
+import { Button, Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import { baseURL } from "../config";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import LoadingNavbar from "./LoadingNavbar";
+import { useSelector } from "react-redux";
 
-export default function NavbarComponent() {
+export default function NavbarComponent({handleLogout}) {
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
-
-
+  const siteSettings = useSelector((state) => state.siteSettings);
+  const username = useSelector((state) => state.user.username);
+  const logged = useSelector((state) => state.user.logged);
 
   useEffect(() => {
     loadNavbarData();
-   
-  }, []);
+   console.log(username)
+  }, [username]);
 
   const loadNavbarData = async () => {
     try {
@@ -53,7 +55,8 @@ export default function NavbarComponent() {
         <Navbar expand="lg" className="bg-body-tertiary" data-bs-theme="dark">
           <Container>
             <Link to="/" className="navbar-brand">
-              WP API Test
+              {Object.keys(siteSettings).length > 0 ? 
+              siteSettings.title : "Site Title"}
             </Link>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -103,9 +106,21 @@ export default function NavbarComponent() {
                     ))}
                   </NavDropdown>
                 )}
-                
+                {username && <Nav.Link >
+                {`Hi ${username}`}
+                  </Nav.Link>}
+                  {
+                  logged &&
+                  <Button 
+                  className="ms-md-5"
+                  variant="light"
+                  onClick={handleLogout}
+                  >Logout</Button>
+                }
               </Nav>
+              
             </Navbar.Collapse>
+       
           </Container>
         </Navbar>
       )}
