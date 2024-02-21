@@ -4,7 +4,7 @@ const userReducer = (
       token: "",
       username: "",
       email: "",
-      logged: false
+      logged: false,
     },
   },
   action
@@ -16,7 +16,7 @@ const userReducer = (
       return { ...state, username: action.payload };
     case "SET_EMAIL":
       return { ...state, email: action.payload };
-      case "SET_LOGGED":
+    case "SET_LOGGED":
       return { ...state, logged: action.payload };
     default:
       return state;

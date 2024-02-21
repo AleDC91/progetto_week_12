@@ -2,11 +2,12 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { baseURL } from "../config";
-import { Spinner } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import LoadingComponent from "./LoadingComponent";
 import ErrorComponent from "./ErrorComponent";
 import SinglePostComponent from "./SinglePostComponent";
 import SearchPostsComponent from "./SearchPostsComponent";
+import { useSelector } from "react-redux";
 
 export default function AuthorPageComponent() {
   const { authorId } = useParams();
@@ -15,6 +16,7 @@ export default function AuthorPageComponent() {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
   const [query, setQuery] = useState("");
+  const token = useSelector(state => state.user.token)
 
   useEffect(() => {
     setErrorMsg("");
@@ -50,6 +52,24 @@ export default function AuthorPageComponent() {
       .finally(setLoading(false));
   };
 
+
+  const handleDelete = (e) => {
+    setErrorMsg('');
+    e.preventDefault();
+    deleteUser();
+  }
+
+  const deleteUser = () => {
+    axios.delete(baseURL + `users/${authorId}/`, {
+      headers: {
+        "authorization": "Bearer " + token
+      }
+    }).catch(err => {
+      console.error("Error deleting user");
+      setErrorMsg(err.message);
+    })
+  }
+
   return (
     <main className="container my-5">
       {errorMsg && <ErrorComponent errorMsg={errorMsg} />}
@@ -57,7 +77,7 @@ export default function AuthorPageComponent() {
         <LoadingComponent msg="Loading Author Data" />
       ) : (
         author &&
-        !errorMsg && (
+         (
           <>
             <div className="author-info d-md-flex align-items-center">
               <img
@@ -69,6 +89,13 @@ export default function AuthorPageComponent() {
                 <h1>{author.name}</h1>
                 <p>{author.description}</p>
               </div>
+              <Button 
+              className="ms-5" 
+              variant="danger"
+              onClick={(e) => handleDelete(e)}
+              >
+                Delete User
+              </Button>
             </div>
             <SearchPostsComponent setQuery={setQuery} />
             <div className="author-articles my-5">

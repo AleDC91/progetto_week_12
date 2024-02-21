@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setUserEmail,
   setUserLogged,
+  setUserIsAdmin,
   setUserToken,
   setUserUsername,
 } from "./actions/userActions";
@@ -21,11 +22,15 @@ import axios from "axios";
 import { baseURL } from "./config";
 import NewPostPage from "./pages/NewPostPage";
 
+
 function App() {
   const dispatch = useDispatch();
 
   const token = useSelector((state) => state.user.token);
   const logged = useSelector((state) => state.user.logged);
+
+
+
   const siteSettings = useSelector((state) => state.siteSettings);
 
   useEffect(() => {
@@ -39,6 +44,7 @@ function App() {
     dispatch(setUserToken(token));
     dispatch(setUserLogged(true));
     getSiteSettings(token);
+
     console.log(siteSettings);
   };
 
@@ -56,13 +62,17 @@ function App() {
           Authorization: "Bearer " + token,
         },
       })
-      .then((res) => dispatch(setSiteSettings(res.data)));
+      .then((res) => dispatch(setSiteSettings(res.data)))
+      .catch((err) => console.error(err.message));
   };
+
 
   return (
     <div className="App">
       <BrowserRouter>
-        <NavbarComponent handleLogout={handleLogout} />
+        <NavbarComponent
+          handleLogout={handleLogout}
+        />
         <Routes>
           <Route
             path="/login"
@@ -94,10 +104,11 @@ function App() {
             path="/tag/:tagId"
             element={logged ? <TagPage /> : <Navigate to="/login" />}
           />
-           <Route
+          <Route
             path="/newPost"
             element={logged ? <NewPostPage /> : <Navigate to="/login" />}
           />
+
         </Routes>
       </BrowserRouter>
     </div>

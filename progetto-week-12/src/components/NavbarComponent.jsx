@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import LoadingNavbar from "./LoadingNavbar";
 import { useSelector } from "react-redux";
 
-export default function NavbarComponent({ handleLogout }) {
+export default function NavbarComponent({ handleLogout}) {
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [authors, setAuthors] = useState([]);
@@ -15,6 +15,10 @@ export default function NavbarComponent({ handleLogout }) {
   const siteSettings = useSelector((state) => state.siteSettings);
   const username = useSelector((state) => state.user.username);
   const logged = useSelector((state) => state.user.logged);
+  const isAdmin = useSelector((state) => state.user.isAdmin);
+
+
+
 
   useEffect(() => {
     loadNavbarData();
@@ -116,6 +120,7 @@ export default function NavbarComponent({ handleLogout }) {
                     NEW POST
                   </Link>
                 )}
+               
                 {logged && (
                   <Button
                     className="ms-md-5"

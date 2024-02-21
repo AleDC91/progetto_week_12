@@ -11,7 +11,7 @@ const [posts, setPosts] = useState([]);
 
 useEffect(() =>{
     getPosts();
-    console.log(categoryId);
+    // console.log(categoryId);
 },[]);
 
 
